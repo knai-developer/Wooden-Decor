@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimberTails - Handcrafted Wooden Decor</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wood: {
+                            DEFAULT: '#8B4513',
+                            light: '#D2B48C',
+                            dark: '#5C2E0B'
+                        }
+                    },
+                    fontFamily: {
+                        logo: ['Pacifico', 'cursive'],
+                        body: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-logo { font-family: 'Pacifico', cursive; }
+        
+        /* Marquee Animation */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-content {
+            display: flex;
+            animation: marquee 20s linear infinite;
+        }
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+        
+        /* Fade-up Animation */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Product Hover */
+        .product-card:hover .product-image {
+            transform: scale(1.12);
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(139, 69, 19, 0.15);
+        }
+        .product-image {
+            transition: transform 0.4s ease;
+        }
+        
+        /* Parallax */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        /* Cart Sidebar */
+        .cart-sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .cart-sidebar.open {
+            transform: translateX(0);
+        }
+        
+        /* Modal Overlay */
+        .modal-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-content {
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        
+        /* FAQ Chevron Rotation */
+        .faq-chevron {
+            transition: transform 0.3s ease;
+        }
+        .faq-item.active .faq-chevron {
+            transform: rotate(180deg);
+        }
+        
+        /* Toast Animation */
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        .toast-enter {
+            animation: slideInRight 0.3s ease forwards;
+        }
+        .toast-exit {
+            animation: slideOutRight 0.3s ease forwards;
+        }
+        
+        /* Button Styles */
+        .btn-wood-outline {
+            color: #8B4513;
+            border: 2px solid #8B4513;
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+        .btn-wood-outline:hover {
+            background: rgba(139, 69, 19, 0.08);
+            color: #8B4513;
+        }
+        
+        .btn-wood-solid {
+            background: #8B4513;
+            color: white;
+            border: 2px solid #8B4513;
+            transition: all 0.2s ease;
+        }
+        .btn-wood-solid:hover {
+            background: #5C2E0B;
+            border-color: #5C2E0B;
+        }
+        
+        .filter-pill {
+            color: #8B4513;
+            border: 2px solid #8B4513;
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+        .filter-pill.active, .filter-pill:hover {
+            background: #8B4513;
+            color: white;
+        }
+        
+        /* Smooth scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D2B48C;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8B4513;
+        }
+    </style>
+</head>
+<body class="bg-[#f5f5f0] text-gray-800 overflow-x-hidden">
+
+    <!-- Sticky Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="#" class="flex items-center space-x-3">
+                    <img src="logo.png" alt="TimberTails" class="h-12 w-auto">
+                    <span class="font-logo text-2xl text-wood">TimberTails</span>
+                </a>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#products" class="text-gray-700 hover:text-wood transition">Products</a>
+                    <a href="#story" class="text-gray-700 hover:text-wood transition">Our Story</a>
+                    <a href="#gallery" class="text-gray-700 hover:text-wood transition">Gallery</a>
+                    <a href="#reviews" class="text-gray-700 hover:text-wood transition">Reviews</a>
+                    <a href="#faq" class="text-gray-700 hover:text-wood transition">FAQ</a>
+                </nav>
+                <button id="cart-btn" class="relative p-2 text-gray-700 hover:text-wood transition">
+                    <i class="fas fa-shopping-cart text-2xl"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-wood text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-10"></div>
+        <img src="hero.jpg" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover">
+        <div class="relative z-20 text-center px-4 max-w-4xl mx-auto">
+            <h1 class="font-logo text-5xl md:text-7xl lg:text-8xl text-white mb-6">TimberTails</h1>
+            <p class="text-2xl md:text-4xl text-wood-light font-semibold mb-6">Handcrafted Wooden Decor for Your Home</p>
+            <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed">Every piece tells a story of traditional craftsmanship and natural beauty. Our artisans carefully select premium wood to create unique, sustainable decor that brings warmth and character to your living spaces.</p>
+            <a href="#products" class="inline-block btn-wood-solid px-10 py-4 text-lg font-semibold rounded-lg">
+                Shop Now <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
+            <i class="fas fa-chevron-down text-white text-3xl"></i>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <section class="bg-wood py-4 overflow-hidden">
+        <div class="marquee-content whitespace-nowrap">
+            <div class="flex items-center space-x-20 mx-10">
+                <span class="text-white font-semibold text-lg"><i class="fas fa-truck mr-2"></i> Free Delivery Nationwide</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-money-bill-wave mr-2"></i> Cash on Delivery Available</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-leaf mr-2"></i> 100% Sustainable Wood</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-star mr-2"></i> 5-Star Customer Rating</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-truck mr-2"></i> Free Delivery Nationwide</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-money-bill-wave mr-2"></i> Cash on Delivery Available</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-leaf mr-2"></i> 100% Sustainable Wood</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-star mr-2"></i> 5-Star Customer Rating</span>
+            </div>
+            <div class="flex items-center space-x-20 mx-10">
+                <span class="text-white font-semibold text-lg"><i class="fas fa-truck mr-2"></i> Free Delivery Nationwide</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-money-bill-wave mr-2"></i> Cash on Delivery Available</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-leaf mr-2"></i> 100% Sustainable Wood</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-star mr-2"></i> 5-Star Customer Rating</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-truck mr-2"></i> Free Delivery Nationwide</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-money-bill-wave mr-2"></i> Cash on Delivery Available</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-leaf mr-2"></i> 100% Sustainable Wood</span>
+                <span class="text-white font-semibold text-lg"><i class="fas fa-star mr-2"></i> 5-Star Customer Rating</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Grid -->
+    <section id="products" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto fade-up">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Featured Products</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Discover our handcrafted collection of premium wooden decor</p>
+        </div>
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Products will be injected by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Category Filter Pills -->
+    <section id="filters" class="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto fade-up">
+        <div class="flex flex-wrap justify-center gap-4">
+            <button class="filter-pill active px-6 py-3 rounded-full font-semibold" data-category="all">All Products</button>
+            <button class="filter-pill px-6 py-3 rounded-full font-semibold" data-category="Home Decor">Home Decor</button>
+            <button class="filter-pill px-6 py-3 rounded-full font-semibold" data-category="Lighting">Lighting</button>
+            <button class="filter-pill px-6 py-3 rounded-full font-semibold" data-category="Storage">Storage</button>
+        </div>
+    </section>
+
+    <!-- Limited Time Offer -->
+    <section id="offer" class="py-16 bg-gradient-to-r from-wood to-wood-dark text-white fade-up">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <h3 class="text-3xl md:text-5xl font-bold mb-4"><i class="fas fa-fire mr-2"></i> Limited Time Offer</h3>
+            <p class="text-xl mb-8">Get 15% OFF on all products this weekend only!</p>
+            <div id="countdown" class="flex justify-center gap-6 mb-8">
+                <div class="bg-white/20 backdrop-blur rounded-lg px-6 py-4">
+                    <span id="days" class="text-4xl font-bold block">03</span>
+                    <span class="text-sm uppercase">Days</span>
+                </div>
+                <div class="bg-white/20 backdrop-blur rounded-lg px-6 py-4">
+                    <span id="hours" class="text-4xl font-bold block">00</span>
+                    <span class="text-sm uppercase">Hours</span>
+                </div>
+                <div class="bg-white/20 backdrop-blur rounded-lg px-6 py-4">
+                    <span id="minutes" class="text-4xl font-bold block">00</span>
+                    <span class="text-sm uppercase">Minutes</span>
+                </div>
+                <div class="bg-white/20 backdrop-blur rounded-lg px-6 py-4">
+                    <span id="seconds" class="text-4xl font-bold block">00</span>
+                    <span class="text-sm uppercase">Seconds</span>
+                </div>
+            </div>
+            <a href="#products" class="inline-block bg-white text-wood px-10 py-4 text-lg font-semibold rounded-lg hover:bg-gray-100 transition">
+                Claim Your Discount <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Artisan Story Section -->
+    <section id="story" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto fade-up">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h3 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">The Artisan Behind Every Piece</h3>
+                <p class="text-lg text-gray-700 leading-relaxed mb-8">Behind every TimberTails piece is an artisan who transforms raw timber into heirloom art. Using only hand-selected oak, walnut, and teak, our workshops combine ancestral joinery techniques with modern sustainable practices.</p>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-wood/10 p-3 rounded-full">
+                            <i class="fas fa-hands text-wood text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg">100% Handmade</h4>
+                            <p class="text-gray-600">Every piece crafted by hand with care</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-wood/10 p-3 rounded-full">
+                            <i class="fas fa-tools text-wood text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg">Traditional Techniques</h4>
+                            <p class="text-gray-600">Methods passed down through generations</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-wood/10 p-3 rounded-full">
+                            <i class="fas fa-tree text-wood text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg">Eco-Friendly</h4>
+                            <p class="text-gray-600">Sustainably sourced materials only</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rounded-2xl overflow-hidden shadow-xl">
+                <img src="Premium Quality & Craftsmanship.jpg" alt="Artisan Craftsmanship" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section id="why-choose" class="py-20 bg-white fade-up">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-12">Why Choose TimberTails?</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-8 bg-[#f5f5f0] rounded-2xl hover:shadow-lg transition">
+                    <div class="bg-wood/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl font-bold text-wood">2K+</span>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-3">Trees Preserved</h4>
+                    <p class="text-gray-600">For every piece sold, we plant two new trees to ensure sustainable futures.</p>
+                </div>
+                <div class="text-center p-8 bg-[#f5f5f0] rounded-2xl hover:shadow-lg transition">
+                    <div class="bg-wood/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl font-bold text-wood">5yr</span>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-3">Warranty</h4>
+                    <p class="text-gray-600">Every product comes with a 5-year warranty against defects and damage.</p>
+                </div>
+                <div class="text-center p-8 bg-[#f5f5f0] rounded-2xl hover:shadow-lg transition">
+                    <div class="bg-wood/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl font-bold text-wood">45+</span>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-3">Master Craftsmen</h4>
+                    <p class="text-gray-600">Our skilled artisans bring decades of experience to every creation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Premium Quality Section -->
+    <section id="quality" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto fade-up">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="rounded-2xl overflow-hidden shadow-xl order-2 md:order-1">
+                <img src="Premium Quality & Craftsmanship.jpg" alt="Premium Quality" class="w-full h-full object-cover">
+            </div>
+            <div class="order-1 md:order-2">
+                <h3 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Premium Quality & Craftsmanship</h3>
+                <p class="text-lg text-gray-700 leading-relaxed mb-8">Each piece is meticulously handcrafted by skilled artisans using traditional techniques passed down through generations. We source only the finest sustainable wood materials to ensure durability and natural beauty.</p>
+                <ul class="space-y-4">
+                    <li class="flex items-start space-x-3">
+                        <i class="fas fa-check-circle text-wood text-xl mt-1"></i>
+                        <span class="text-gray-700">FSC-certified sustainable wood sources</span>
+                    </li>
+                    <li class="flex items-start space-x-3">
+                        <i class="fas fa-check-circle text-wood text-xl mt-1"></i>
+                        <span class="text-gray-700">Natural beeswax and oil finishes only</span>
+                    </li>
+                    <li class="flex items-start space-x-3">
+                        <i class="fas fa-check-circle text-wood text-xl mt-1"></i>
+                        <span class="text-gray-700">Traditional joinery, no metal fasteners</span>
+                    </li>
+                    <li class="flex items-start space-x-3">
+                        <i class="fas fa-check-circle text-wood text-xl mt-1"></i>
+                        <span class="text-gray-700">Quality inspected before every shipment</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Showcase -->
+    <section id="gallery" class="relative py-24 parallax-bg">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70 z-10"></div>
+        <div class="absolute inset-0" style="background-image: url('Premium Quality & Craftsmanship.jpg');"></div>
+        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-4xl md:text-5xl font-bold text-center text-white mb-12">Our Work in Focus</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="overflow-hidden rounded-lg group">
+                    <img src="gallery 1.jpg" alt="Gallery 1" class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="overflow-hidden rounded-lg group">
+                    <img src="gallery 2.jpg" alt="Gallery 2" class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="overflow-hidden rounded-lg group">
+                    <img src="gallery 3.jpg" alt="Gallery 3" class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="overflow-hidden rounded-lg group">
+                    <img src="gallery 4.jpg" alt="Gallery 4" class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bespoke Design Studio -->
+    <section id="bespoke" class="py-20 bg-white fade-up">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h3 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Bespoke Design Studio</h3>
+                <p class="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">From custom dimensions to unique engravings, our design team collaborates with you to create one-of-a-kind wooden furniture, wall art or shelves that fit your space perfectly.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-8 border-2 border-wood/20 rounded-2xl hover:border-wood transition">
+                    <div class="bg-wood/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-comments text-wood text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-3">Free Consultation</h4>
+                    <p class="text-gray-600">Discuss your vision with our expert designers at no cost.</p>
+                </div>
+                <div class="text-center p-8 border-2 border-wood/20 rounded-2xl hover:border-wood transition">
+                    <div class="bg-wood/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cube text-wood text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-3">3D Mockups</h4>
+                    <p class="text-gray-600">See your custom design before we start crafting.</p>
+                </div>
+                <div class="text-center p-8 border-2 border-wood/20 rounded-2xl hover:border-wood transition">
+                    <div class="bg-wood/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-wrench text-wood text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-3">Installation Support</h4>
+                    <p class="text-gray-600">Professional setup and mounting assistance included.</p>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <a href="https://wa.me/923140607452?text=I'm%20interested%20in%20a%20custom%20order" target="_blank" class="btn-wood-solid inline-block px-10 py-4 text-lg font-semibold rounded-lg">
+                    <i class="fab fa-whatsapp mr-2"></i> Start Your Custom Order
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Reviews -->
+    <section id="reviews" class="py-20 bg-[#f5f5f0] fade-up">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-12">What Our Customers Say</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                    </div>
+                    <p class="text-gray-700 mb-6 leading-relaxed">"Absolutely stunning craftsmanship! The floating shelf I ordered exceeded all my expectations. The wood grain is beautiful and it feels incredibly sturdy."</p>
+                    <div class="flex items-center">
+                        <div class="bg-wood/10 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <span class="font-bold text-wood">AK</span>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold">Ayesha Khan</h5>
+                            <p class="text-gray-500 text-sm"><i class="fas fa-map-marker-alt mr-1"></i> Karachi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                    </div>
+                    <p class="text-gray-700 mb-6 leading-relaxed">"Ordered a custom wall art panel as a gift. The team was so helpful and the final product brought tears to my eyes. Truly heirloom quality!"</p>
+                    <div class="flex items-center">
+                        <div class="bg-wood/10 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <span class="font-bold text-wood">HA</span>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold">Hassan Ali</h5>
+                            <p class="text-gray-500 text-sm"><i class="fas fa-map-marker-alt mr-1"></i> Lahore</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500"></i>
+                    </div>
+                    <p class="text-gray-700 mb-6 leading-relaxed">"Fast delivery and excellent quality. The desk organizer has transformed my workspace. Will definitely order more pieces for my home office."</p>
+                    <div class="flex items-center">
+                        <div class="bg-wood/10 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <span class="font-bold text-wood">SF</span>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold">Sana Fatima</h5>
+                            <p class="text-gray-500 text-sm"><i class="fas fa-map-marker-alt mr-1"></i> Islamabad</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram / Social Proof -->
+    <section id="instagram" class="py-20 bg-white fade-up">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h3 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4"><i class="fab fa-instagram text-wood mr-3"></i>Follow Our Journey</h3>
+            <p class="text-lg text-gray-600 mb-10">Join 15K+ followers on Instagram for behind-the-scenes content and new arrivals</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+                <div class="aspect-square overflow-hidden rounded-lg group">
+                    <img src="gallery 1.jpg" alt="Instagram 1" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="aspect-square overflow-hidden rounded-lg group">
+                    <img src="gallery 2.jpg" alt="Instagram 2" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="aspect-square overflow-hidden rounded-lg group">
+                    <img src="gallery 3.jpg" alt="Instagram 3" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="aspect-square overflow-hidden rounded-lg group">
+                    <img src="gallery 4.jpg" alt="Instagram 4" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+            </div>
+            <a href="https://instagram.com/timbertails" target="_blank" class="btn-wood-solid inline-block px-10 py-4 text-lg font-semibold rounded-lg">
+                <i class="fab fa-instagram mr-2"></i> @timbertails
+            </a>
+        </div>
+    </section>
+
+    <!-- FAQ Accordion -->
+    <section id="faq" class="py-20 bg-[#f5f5f0] fade-up">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-12">Frequently Asked Questions</h3>
+            <div id="faq-container" class="space-y-4">
+                <div class="faq-item bg-white rounded-lg shadow-md">
+                    <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+                        <span class="text-lg font-semibold text-gray-900">How long does delivery take?</span>
+                        <i class="fas fa-chevron-down text-wood faq-chevron"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-700">Standard delivery takes 5-7 business days across Pakistan. Custom orders may take 2-3 weeks depending on complexity. We offer free shipping nationwide.</p>
+                    </div>
+                </div>
+                <div class="faq-item bg-white rounded-lg shadow-md">
+                    <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+                        <span class="text-lg font-semibold text-gray-900">What payment methods do you accept?</span>
+                        <i class="fas fa-chevron-down text-wood faq-chevron"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-700">We offer Cash on Delivery (COD) for all orders. You can also pay via bank transfer or JazzCash/EasyPaisa. Payment is collected upon delivery for COD orders.</p>
+                    </div>
+                </div>
+                <div class="faq-item bg-white rounded-lg shadow-md">
+                    <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+                        <span class="text-lg font-semibold text-gray-900">Do you offer returns or exchanges?</span>
+                        <i class="fas fa-chevron-down text-wood faq-chevron"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-700">Yes, we accept returns within 7 days of delivery if the product is unused and in original packaging. Custom orders are final sale unless defective.</p>
+                    </div>
+                </div>
+                <div class="faq-item bg-white rounded-lg shadow-md">
+                    <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+                        <span class="text-lg font-semibold text-gray-900">How do I care for my wooden decor?</span>
+                        <i class="fas fa-chevron-down text-wood faq-chevron"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-700">Dust regularly with a soft cloth. Avoid direct sunlight and moisture. Apply natural wood oil every 6 months to maintain the finish. Do not use harsh chemical cleaners.</p>
+                    </div>
+                </div>
+                <div class="faq-item bg-white rounded-lg shadow-md">
+                    <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+                        <span class="text-lg font-semibold text-gray-900">Can I request a custom design?</span>
+                        <i class="fas fa-chevron-down text-wood faq-chevron"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-700">Absolutely! Our bespoke design studio specializes in custom orders. Contact us via WhatsApp with your requirements and we'll provide a free consultation and quote.</p>
+                    </div>
+                </div>
+                <div class="faq-item bg-white rounded-lg shadow-md">
+                    <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+                        <span class="text-lg font-semibold text-gray-900">Is the wood sustainably sourced?</span>
+                        <i class="fas fa-chevron-down text-wood faq-chevron"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-700">Yes, all our wood is sourced from FSC-certified sustainable forests. We plant two trees for every piece sold and use eco-friendly finishes only.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section id="final-cta" class="py-20 bg-gradient-to-br from-gray-900 to-black text-white fade-up">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <h3 class="text-4xl md:text-5xl font-bold mb-6">Ready to Transform Your Space?</h3>
+            <p class="text-xl text-gray-300 mb-10">Join thousands of happy customers who've brought natural warmth into their homes with TimberTails.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#products" class="btn-wood-solid px-10 py-4 text-lg font-semibold rounded-lg">
+                    <i class="fas fa-shopping-bag mr-2"></i> Shop Now
+                </a>
+                <a href="https://wa.me/923140607452?text=Hi!%20I'd%20like%20to%20place%20an%20order" target="_blank" class="inline-block px-10 py-4 text-lg font-semibold rounded-lg border-2 border-white text-white hover:bg-white hover:text-gray-900 transition">
+                    <i class="fab fa-whatsapp mr-2"></i> WhatsApp Order
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-gray-900 text-gray-300 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="logo.png" alt="TimberTails" class="h-10 w-auto">
+                        <span class="font-logo text-2xl text-wood-light">TimberTails</span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">Handcrafted wooden decor that brings natural beauty and warmth to your home. Each piece is uniquely made with love and traditional craftsmanship.</p>
+                </div>
+                <div>
+                    <h5 class="text-white font-semibold text-lg mb-4">Quick Links</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#products" class="hover:text-wood-light transition">Products</a></li>
+                        <li><a href="#story" class="hover:text-wood-light transition">Our Story</a></li>
+                        <li><a href="#gallery" class="hover:text-wood-light transition">Gallery</a></li>
+                        <li><a href="#reviews" class="hover:text-wood-light transition">Reviews</a></li>
+                        <li><a href="#faq" class="hover:text-wood-light transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-semibold text-lg mb-4">Customer Service</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-wood-light transition">Shipping Policy</a></li>
+                        <li><a href="#" class="hover:text-wood-light transition">Returns & Exchanges</a></li>
+                        <li><a href="#" class="hover:text-wood-light transition">Warranty Info</a></li>
+                        <li><a href="#" class="hover:text-wood-light transition">Care Instructions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-semibold text-lg mb-4">Contact Us</h5>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-map-marker-alt text-wood-light mt-1"></i>
+                            <span>Workshop 12, Artisan Colony, Lahore, Pakistan</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fas fa-phone text-wood-light"></i>
+                            <span>+92 314 0607452</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fab fa-whatsapp text-wood-light"></i>
+                            <span>+92 314 0607452</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fas fa-envelope text-wood-light"></i>
+                            <span>hello@timbertails.pk</span>
+                        </li>
+                    </ul>
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-gray-400 hover:text-wood-light transition"><i class="fab fa-facebook-f text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-wood-light transition"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-wood-light transition"><i class="fab fa-pinterest-p text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-wood-light transition"><i class="fab fa-youtube text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-gray-500">&copy; 2025 TimberTails. All rights reserved. Crafted with <i class="fas fa-heart text-wood-light"></i> in Pakistan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden" onclick="closeCart()"></div>
+    <div id="cart-sidebar" class="cart-sidebar fixed top-0 right-0 h-full w-full max-w-[450px] bg-white z-50 shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between p-6 border-b">
+            <h3 class="text-2xl font-bold text-gray-900">Your Cart</h3>
+            <button onclick="closeCart()" class="p-2 hover:bg-gray-100 rounded-full">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6">
+            <p class="text-gray-500 text-center">Your cart is empty</p>
+        </div>
+        <div class="border-t p-6 bg-[#f5f5f0]">
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-lg font-semibold">Total:</span>
+                <span id="cart-total" class="text-2xl font-bold text-wood">PKR 0</span>
+            </div>
+            <button onclick="openOrderModal()" class="btn-wood-solid w-full py-4 text-lg font-semibold rounded-lg">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal-overlay fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" onclick="closeProductModal(event)">
+        <div class="modal-content bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 id="modal-title" class="text-3xl font-bold text-gray-900"></h3>
+                    <button onclick="closeProductModal()" class="p-2 hover:bg-gray-100 rounded-full">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <img id="modal-main-image" src="" alt="Product" class="w-full h-80 object-cover rounded-lg mb-4">
+                        <div id="modal-thumbnails" class="grid grid-cols-5 gap-2">
+                            <!-- Thumbnails injected by JS -->
+                        </div>
+                    </div>
+                    <div>
+                        <p id="modal-price" class="text-3xl font-bold text-wood mb-4"></p>
+                        <p id="modal-description" class="text-gray-700 mb-6 leading-relaxed"></p>
+                        <p id="modal-category" class="text-sm text-gray-500 mb-6"><i class="fas fa-tag mr-2"></i></p>
+                        <div class="flex items-center mb-6">
+                            <span class="mr-4 font-semibold">Quantity:</span>
+                            <div class="flex items-center border-2 border-gray-300 rounded-lg">
+                                <button onclick="updateModalQuantity(-1)" class="px-4 py-2 hover:bg-gray-100">-</button>
+                                <span id="modal-quantity" class="px-6 py-2 font-semibold">1</span>
+                                <button onclick="updateModalQuantity(1)" class="px-4 py-2 hover:bg-gray-100">+</button>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <button id="modal-add-cart" class="btn-wood-outline flex-1 py-3 font-semibold rounded-lg">
+                                Add to Cart
+                            </button>
+                            <button id="modal-buy-now" class="btn-wood-outline flex-1 py-3 font-semibold rounded-lg">
+                                Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modal (Checkout) -->
+    <div id="order-modal" class="modal-overlay fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" onclick="closeOrderModal(event)">
+        <div class="modal-content bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-3xl font-bold text-gray-900">Complete Your Order</h3>
+                    <button onclick="closeOrderModal()" class="p-2 hover:bg-gray-100 rounded-full">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <form id="order-form" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">First Name *</label>
+                            <input type="text" id="first-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-wood focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Last Name *</label>
+                            <input type="text" id="last-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-wood focus:outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Address *</label>
+                        <textarea id="address" required rows="3" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-wood focus:outline-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">WhatsApp Number *</label>
+                        <input type="tel" id="whatsapp-number" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-wood focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Notes (Optional)</label>
+                        <textarea id="notes" rows="2" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-wood focus:outline-none"></textarea>
+                    </div>
+                    <div class="bg-[#f5f5f0] p-4 rounded-lg mb-4">
+                        <h4 class="font-semibold mb-2">Order Summary</h4>
+                        <div id="order-summary" class="text-gray-700"></div>
+                    </div>
+                    <button type="submit" class="btn-wood-solid w-full py-4 text-lg font-semibold rounded-lg">
+                        <i class="fab fa-whatsapp mr-2"></i> Send Order via WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3"></div>
+
+    <script>
+        // Product Data
+        const products = [
+            { id: 1, name: "Rustic Floating Shelf", price: 3500, description: "Handcrafted from solid oak, holds up to 30kg. Unique grain pattern.", category: "Home Decor", image: "product 1.jpg" },
+            { id: 2, name: "Wooden Table Lamp", price: 4200, description: "Warm ambient lighting with hand-turned walnut base.", category: "Lighting", image: "product 2.jpg" },
+            { id: 3, name: "Carved Wall Art Panel", price: 5800, description: "Intricate mandala carving, natural beeswax finish.", category: "Home Decor", image: "product 3.jpg" },
+            { id: 4, name: "Wooden Storage Box", price: 2800, description: "Perfect for keepsakes, dovetail joinery.", category: "Storage", image: "product 4.jpg" },
+            { id: 5, name: "Wooden Bookends Set", price: 3200, description: "Set of two, heavy solid wood, non-slip base.", category: "Home Decor", image: "product 5.jpg" },
+            { id: 6, name: "Wooden Picture Frame", price: 1800, description: "A4 size, handmade miters, includes glass.", category: "Home Decor", image: "product 6.jpg" },
+            { id: 7, name: "Wooden Desk Organizer", price: 4500, description: "5 compartments, phone slot, cable hole.", category: "Storage", image: "product 7.jpg" },
+            { id: 8, name: "Wooden Candle Holder", price: 2200, description: "Floating effect, fits standard candles.", category: "Home Decor", image: "product 8.jpg" },
+            { id: 9, name: "Wooden Wall Mirror", price: 6500, description: "Round mirror, solid ash frame, wall mount included.", category: "Home Decor", image: "product 9.jpg" },
+            { id: 10, name: "Wooden Plant Stand", price: 3800, description: "Mid-century style, supports up to 15kg.", category: "Home Decor", image: "product 10.jpg" }
+        ];
+
+        // Cart State
+        let cart = JSON.parse(localStorage.getItem('timbertails-cart')) || [];
+        let modalQuantity = 1;
+        let currentProduct = null;
+
+        // Render Products
+        function renderProducts(category = 'all') {
+            const grid = document.getElementById('products-grid');
+            const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+            grid.innerHTML = filtered.map(product => `
+                <div class="product-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer" onclick="openProductModal(${product.id})">
+                    <div class="relative overflow-hidden">
+                        <img src="${product.image}" alt="${product.name}" class="product-image w-full h-72 object-cover">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-semibold text-wood">
+                            ${product.category}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-semibold text-gray-900 mb-2">${product.name}</h4>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">${product.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-wood">PKR ${product.price.toLocaleString()}</span>
+                            <button onclick="event.stopPropagation(); quickAdd(${product.id})" class="btn-wood-outline px-4 py-2 rounded-lg font-semibold text-sm">
+                                <i class="fas fa-cart-plus mr-1"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Quick Add to Cart
+        function quickAdd(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            updateCart();
+            showToast(`${product.name} added to cart`);
+        }
+
+        // Update Cart UI
+        function updateCart() {
+            localStorage.setItem('timbertails-cart', JSON.stringify(cart));
+            const badge = document.getElementById('cart-badge');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (totalItems > 0) {
+                badge.textContent = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+            renderCartItems();
+        }
+
+        // Render Cart Items
+        function renderCartItems() {
+            const container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center">Your cart is empty</p>';
+                document.getElementById('cart-total').textContent = 'PKR 0';
+                return;
+            }
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center gap-4 mb-4 pb-4 border-b">
+                    <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg">
+                    <div class="flex-1">
+                        <h5 class="font-semibold text-gray-900">${item.name}</h5>
+                        <p class="text-wood font-bold">PKR ${item.price.toLocaleString()}</p>
+                        <div class="flex items-center mt-2">
+                            <button onclick="updateQuantity(${item.id}, -1)" class="px-2 py-1 bg-gray-200 rounded">-</button>
+                            <span class="px-4 font-semibold">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, 1)" class="px-2 py-1 bg-gray-200 rounded">+</button>
+                        </div>
+                    </div>
+                    <button onclick="removeItem(${item.id})" class="p-2 text-red-500 hover:bg-red-50 rounded-full">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('cart-total').textContent = `PKR ${total.toLocaleString()}`;
+        }
+
+        // Update Quantity
+        function updateQuantity(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+                updateCart();
+            }
+        }
+
+        // Remove Item
+        function removeItem(productId) {
+            cart = cart.filter(i => i.id !== productId);
+            updateCart();
+        }
+
+        // Open/Close Cart
+        function openCart() {
+            document.getElementById('cart-sidebar').classList.add('open');
+            document.getElementById('cart-overlay').classList.remove('hidden');
+        }
+        function closeCart() {
+            document.getElementById('cart-sidebar').classList.remove('open');
+            document.getElementById('cart-overlay').classList.add('hidden');
+        }
+        document.getElementById('cart-btn').addEventListener('click', openCart);
+
+        // Product Modal
+        function openProductModal(productId) {
+            currentProduct = products.find(p => p.id === productId);
+            modalQuantity = 1;
+            document.getElementById('modal-title').textContent = currentProduct.name;
+            document.getElementById('modal-price').textContent = `PKR ${currentProduct.price.toLocaleString()}`;
+            document.getElementById('modal-description').textContent = currentProduct.description;
+            document.getElementById('modal-category').innerHTML = `<i class="fas fa-tag mr-2"></i> ${currentProduct.category}`;
+            document.getElementById('modal-main-image').src = currentProduct.image;
+            document.getElementById('modal-quantity').textContent = modalQuantity;
+            
+            const thumbnails = document.getElementById('modal-thumbnails');
+            thumbnails.innerHTML = Array(5).fill('').map(() => `
+                <img src="${currentProduct.image}" alt="Thumbnail" class="w-full h-20 object-cover rounded cursor-pointer hover:opacity-80 transition">
+            `).join('');
+            
+            document.getElementById('modal-add-cart').onclick = () => {
+                addToCartFromModal(false);
+            };
+            document.getElementById('modal-buy-now').onclick = () => {
+                addToCartFromModal(true);
+            };
+            
+            document.getElementById('product-modal').classList.add('active');
+        }
+
+        function closeProductModal(event) {
+            if (!event || event.target === document.getElementById('product-modal')) {
+                document.getElementById('product-modal').classList.remove('active');
+            }
+        }
+
+        function updateModalQuantity(change) {
+            modalQuantity = Math.max(1, modalQuantity + change);
+            document.getElementById('modal-quantity').textContent = modalQuantity;
+        }
+
+        function addToCartFromModal(openCartAfter) {
+            const existing = cart.find(item => item.id === currentProduct.id);
+            if (existing) {
+                existing.quantity += modalQuantity;
+            } else {
+                cart.push({ ...currentProduct, quantity: modalQuantity });
+            }
+            updateCart();
+            showToast(`${currentProduct.name} added to cart`);
+            closeProductModal();
+            if (openCartAfter) {
+                setTimeout(openCart, 300);
+            }
+        }
+
+        // Order Modal
+        function openOrderModal() {
+            closeCart();
+            const summary = document.getElementById('order-summary');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            summary.innerHTML = `
+                ${cart.map(item => `<div class="flex justify-between py-1"><span>${item.name} x${item.quantity}</span><span>PKR ${(item.price * item.quantity).toLocaleString()}</span></div>`).join('')}
+                <div class="flex justify-between font-bold mt-2 pt-2 border-t"><span>Total</span><span>PKR ${total.toLocaleString()}</span></div>
+            `;
+            document.getElementById('order-modal').classList.add('active');
+        }
+
+        function closeOrderModal(event) {
+            if (!event || event.target === document.getElementById('order-modal')) {
+                document.getElementById('order-modal').classList.remove('active');
+            }
+        }
+
+        // Order Form Submit
+        document.getElementById('order-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('first-name').value;
+            const lastName = document.getElementById('last-name').value;
+            const address = document.getElementById('address').value;
+            const whatsapp = document.getElementById('whatsapp-number').value;
+            const notes = document.getElementById('notes').value;
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            let message = `*New Order from TimberTails Website*\n\n`;
+            message += `*Customer Details:*\n`;
+            message += `Name: ${firstName} ${lastName}\n`;
+            message += `Address: ${address}\n`;
+            message += `WhatsApp: ${whatsapp}\n`;
+            if (notes) message += `Notes: ${notes}\n`;
+            message += `\n*Order Items:*\n`;
+            cart.forEach(item => {
+                message += `- ${item.name} x${item.quantity} = PKR ${(item.price * item.quantity).toLocaleString()}\n`;
+            });
+            message += `\n*Total: PKR ${total.toLocaleString()}*\n`;
+            message += `Payment: COD (Cash on Delivery)`;
+            
+            const encoded = encodeURIComponent(message);
+            window.open(`https://wa.me/923140607452?text=${encoded}`, '_blank');
+            
+            cart = [];
+            updateCart();
+            document.getElementById('order-form').reset();
+            closeOrderModal();
+            showToast('Order sent! Check WhatsApp.');
+        });
+
+        // Toast Notification
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast-enter bg-gray-900 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3';
+            toast.innerHTML = `<i class="fas fa-check-circle text-green-400"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // Category Filter
+        document.querySelectorAll('.filter-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderProducts(btn.dataset.category);
+            });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const item = trigger.parentElement;
+                const content = item.querySelector('.faq-content');
+                const isActive = item.classList.contains('active');
+                
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(faq => {
+                    faq.classList.remove('active');
+                    faq.querySelector('.faq-content').classList.add('hidden');
+                });
+                
+                // Open clicked if was closed
+                if (!isActive) {
+                    item.classList.add('active');
+                    content.classList.remove('hidden');
+                }
+            });
+        });
+
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date();
+            const end = new Date(now);
+            end.setDate(end.getDate() + 3);
+            end.setHours(23, 59, 59, 0);
+            
+            // Store end date in localStorage for persistence
+            let endDate = localStorage.getItem('timbertails-offer-end');
+            if (!endDate) {
+                localStorage.setItem('timbertails-offer-end', end.getTime());
+                endDate = end.getTime();
+            }
+            
+            const diff = endDate - now.getTime();
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Scroll Reveal (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Initialize
+        renderProducts();
+        updateCart();
+    </script>
+</body>
+</html>
